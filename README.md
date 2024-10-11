@@ -31,67 +31,85 @@
 ### Комментарии к занятиям
 # 3. Определение сущностей базы данных
 # 3.1 Сущности
-1. User (Пользователь)
+User (Пользователь)
+
 id: INTEGER, NOT NULL, PK
 name: VARCHAR(100), NOT NULL
 password: VARCHAR(100), NOT NULL
 email: VARCHAR(100), NOT NULL
 telephone_number: VARCHAR(100), NOT NULL
 Связи:
-Один пользователь может иметь несколько ролей (Role).
-Пользователь может быть студентом, преподавателем или администратором.
+Один пользователь может быть администратором, учителем или студентом.
 
-2. Role (Роль)
-id: INTEGER, NOT NULL, PK
-user_id: INTEGER, NOT NULL, FK -> User
-permission_id: INTEGER, NOT NULL, FK -> Permission
-role_name: STRING, NOT NULL
-permission: VARCHAR(100), NOT NULL
+Admin (Администратор)
 
-3.Permission (Разрешение)
 id: INTEGER, NOT NULL, PK
-is_super_user: BOOLEAN, NOT NULL
-is_staff: BOOLEAN, NOT NULL
+user_id: INTEGER, NOT NULL, FK → User
 
-4.Admin (Администратор)
-id: INTEGER, NOT NULL, PK
-user_id: INTEGER, NOT NULL, FK -> User
+Student (Студент)
 
-5.Student (Студент)
 id: INTEGER, NOT NULL, PK
-user_id: INTEGER, NOT NULL, FK -> User
-class_id: VARCHAR(100), NOT NULL, FK -> Class
+user_id: INTEGER, NOT NULL, FK → User
+class_id: INTEGER, NOT NULL, FK → Class
 
-6.Teacher (Преподаватель)
+Teacher (Преподаватель)
+
 id: INTEGER, NOT NULL, PK
-user_id: INTEGER, NOT NULL, FK -> User
+user_id: INTEGER, NOT NULL, FK → User
 specialization: VARCHAR(100), NOT NULL
 
-7.Class (Класс)
-id: INTEGER, NOT NULL, PK
-field: STRING, NOT NULL
-student_id: INTEGER, NOT NULL, FK -> Student
-teacher_id: INTEGER, NOT NULL, FK -> Teacher
-time: INTEGER, NOT NULL
+Class (Класс)
 
-8.Attendance (Посещаемость)
 id: INTEGER, NOT NULL, PK
-class_id: STRING, NOT NULL, FK -> Class
+field: VARCHAR(100), NOT NULL
+teacher_id: INTEGER, NOT NULL, FK → Teacher
+Связи:
+Один класс может включать нескольких студентов, и он назначен одному преподавателю.
+
+Attendance (Посещаемость)
+
+id: INTEGER, NOT NULL, PK
+class_id: INTEGER, NOT NULL, FK → Class
 date: DATE, NOT NULL
 status: VARCHAR(10), NOT NULL
+Связи:
+Посещаемость связана с конкретным занятием.
 
-9.Task (Задание)
+Task (Задание)
+
 id: INTEGER, NOT NULL, PK
-class_id: STRING, NOT NULL, FK -> Class
+class_id: INTEGER, NOT NULL, FK → Class
 status: STRING, NOT NULL
 description: STRING, NOT NULL
+Связи:
+Задания связаны с конкретными классами.
 
-10.Grade (Оценка)
+Grade (Оценка)
+
 grade_id: INTEGER, NOT NULL, PK
-student_id: INTEGER, NOT NULL, FK -> Student
-task_id: INTEGER, NOT NULL, FK -> Task
+student_id: INTEGER, NOT NULL, FK → Student
+task_id: INTEGER, NOT NULL, FK → Task
 grade: DECIMAL(5, 2), NOT NULL
 comments: TEXT
+Связи:
+Оценки выставляются за задания студентов.
+
+Curriculum (Учебный план)
+
+id: INTEGER, NOT NULL, PK
+class_id: INTEGER, NOT NULL, FK → Class
+subject_name: VARCHAR(100), NOT NULL
+Связи:
+Учебный план описывает предметы, связанные с классами.
+
+ActivityLogs (Логи активности)
+
+id: INTEGER, NOT NULL, PK
+user_id: INTEGER, NOT NULL, FK → User
+action: VARCHAR(100), NOT NULL
+timestamp: TIMESTAMP, NOT NULL
+Связи:
+Логи активности фиксируют действия пользователей.
 # 3.2 Описание сущностей
 User (Пользователь): Содержит основную информацию о пользователях системы, включая их идентификационные данные, пароль, электронную почту и номер телефона.
 Role (Роль): Определяет, какую роль (например, студент, преподаватель или администратор) выполняет пользователь в системе.
